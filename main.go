@@ -4,6 +4,7 @@ import (
 	"os"
 	"github.com/jessevdk/go-flags"
 	"github.com/avevlad/git-local-stat/server"
+	"fmt"
 )
 
 var options server.CommandLineOptions
@@ -13,6 +14,6 @@ func main() {
 	if _, err := parser.Parse(); err != nil {
 		os.Exit(1)
 	}
-
+	fmt.Println("123")
 	server.Init(options)
 }
