@@ -14,6 +14,10 @@ func main() {
 	if _, err := parser.Parse(); err != nil {
 		os.Exit(1)
 	}
-	fmt.Println("123")
 	server.Init(options)
+	bodyCommits := server.GetBodyCommits()
+	//_ = server.SetBody(&server.Commits[0], bodyCommits[server.Commits[0].CommitId])
+
+	hh := server.SetBodies(server.Commits, bodyCommits)
+	fmt.Print("hhhhhhhhhhhhhh", hh[2])
 }

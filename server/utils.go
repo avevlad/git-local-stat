@@ -4,14 +4,13 @@ import (
 	"path/filepath"
 	"os"
 	"log"
-	"fmt"
 	"math/rand"
 	"time"
 )
 
 
 func GetCurrentDir() string {
-	fmt.Println(os.Args[1])
+	//fmt.Println(os.Args[1])
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
 		log.Fatal(err)
