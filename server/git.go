@@ -8,7 +8,6 @@ import (
 	"strings"
 	"encoding/json"
 	"regexp"
-	"strconv"
 )
 
 var SanitizedKeyBodyPatter string = "<" + srand(10) + ">"
@@ -22,10 +21,10 @@ var SanitizedKeyBodyPatter string = "<" + srand(10) + ">"
 
 var GitCmdPrettyFlag string = fmt.Sprint(
 	`--pretty=format:{%n  "CommitId": "%H",%n  "TreeId": "%T",%n "ParentId": "%P",%n  "Subject": "%f", %n "VerificationFlag": "%G?",%n  "Author": {%n    "Name": "%aN",%n    "Email": "%aE",%n    "Date": "%aD"%n  }%n  },`,
+	//`--pretty=format:{%n  "CommitId": "%H",%n  "TreeId": "%T",%n "ParentId": "%P",%n  "Subject": "%f", %n  "Body": "%b", %n "VerificationFlag": "%G?",%n  "Author": {%n    "Name": "%aN",%n    "Email": "%aE",%n    "Date": "%aD"%n  }%n  },`,
 )
 
 func ParseGitNormalizeResponse(str string) []GitCommitResponse {
-	//fmt.Println(str)
 	res := []GitCommitResponse{}
 	err := json.Unmarshal([]byte(str), &res)
 	if err != nil {
@@ -37,21 +36,30 @@ func ParseGitNormalizeResponse(str string) []GitCommitResponse {
 }
 
 func NormalizeGitGetResponse(str string, regexKey string) string {
-	re := regexp.MustCompile(fmt.Sprint(regexKey, `((.|\n)*?)`, regexKey))
-	var res = str
-	fmt.Println("----", len(re.FindAllString(str, -1)))
-	for index, element := range re.FindAllString(str, -1) {
-		//fmt.Println("element", element)
-		fmt.Println("index", index)
-		var newString = strings.Replace(element, regexKey, "", -1)
-		//fmt.Println("newString", newString)
-		newString = strconv.Quote(newString)
-		//fmt.Println("newString", newString)
-		//fmt.Println(strings.Replace(element, SanitizedBodyPatter, "11", 2))
-		res = strings.Replace(res, element, newString, -1)
+	brokenDblQuoteRe := regexp.MustCompile("\".*\"\\:\\s\"(.*\".*)\"")
+	matchBrokenDblQuote := brokenDblQuoteRe.FindStringSubmatch(str)
+	fixedFslash := str
+	if len(matchBrokenDblQuote) == 2 {
+		brokenDblQuoteElem := matchBrokenDblQuote[1]
+		fixedDblQuoteElem := strings.Replace(brokenDblQuoteElem, "\"", "U+201C", -1)
+		fixedDblQuoteStr := strings.Replace(str, brokenDblQuoteElem, fixedDblQuoteElem, -1)
+		fixedBslash := strings.Replace(fixedDblQuoteStr, "\\", "U+005C", -1)
+		fixedFslash = strings.Replace(fixedBslash, "/", "U+002F", -1)
 	}
-	fmt.Println("--------222")
-	return "[" + strings.TrimSuffix(res, ",") + "]"
+
+	//re := regexp.MustCompile(fmt.Sprint(regexKey, `((.|\n)*?)`, regexKey))
+	//var res = str
+	//fmt.Println("----", len(re.FindAllString(str, -1)))
+	//for index := range re.FindAllString(str, -1) {
+	//	fmt.Println("!!!!!!!!!!!!", index)
+	//
+	//	//fmt.Println("newString", newString)
+	//	newString = strconv.Quote(newString)
+	//	//fmt.Println("newString", newString)
+	//	res = strings.Replace(res, element, newString, -1)
+	//}
+	//fmt.Println("--------222")
+	return "[" + strings.TrimSuffix(fixedFslash, ",") + "]"
 }
 
 func GitGetResponse() string {

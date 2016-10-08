@@ -7,7 +7,7 @@ type CommandLineOptions struct {
 }
 
 func Init(options CommandLineOptions) {
-	fmt.Println(Commits[0].Author)
+	fmt.Println(Commits[0])
 	fmt.Println(len(Commits))
 	//const name  = Commits[0].Body
 	//for _, element := range Commits {

@@ -1,18 +1,18 @@
 package server
 
 type GitAuthorResponse struct {
-	Name  string
-	Email string
-	Date  string
+	Date  string `json:"Date"`
+	Email string `json:"Email"`
+	Name  string `json:"Name"`
 }
 
 type GitCommitResponse struct {
-	CommitId             string
-	TreeId               string
-	ParentId             string
-	Subject              string
-	SanitizedSubjectLine string
-	Body                 string
-	VerificationFlag     string
-	Author            GitAuthorResponse
+	CommitID string `json:"CommitId"`
+	TreeId               string `json:"TreeId"`
+	ParentId             string `json:"ParentId"`
+	Subject              string `json:"Subject"`
+	SanitizedSubjectLine string `json:"SanitizedSubjectLine"`
+	Body                 string `json:"Body"`
+	VerificationFlag     string `json:"VerificationFlag"`
+	Author            GitAuthorResponse `json:"Author"`
 }
