@@ -21,6 +21,9 @@ var SanitizedKeyBodyPattern string = "<" + srand(10) + ">"
 //	`,%n "VerificationFlag": "%G?",%n  "Author": {%n    "Name": "%aN",%n    "Email": "%aE",%n    "Date": "%aD"%n  }%n  },`,
 
 var GitCmdPrettyFlag string = fmt.Sprint(
+	// unix time stamp?
+	// commiter?
+	// '%N': commit notes
 	`--pretty=format:{%n  "CommitId": "%H",%n  "TreeId": "%T",%n "ParentId": "%P",%n  "Subject": "%f", %n "VerificationFlag": "%G?",%n  "Author": {%n    "Name": "%aN",%n    "Email": "%aE",%n    "Date": "%aD"%n  }%n  },`,
 )
 
