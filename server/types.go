@@ -16,3 +16,5 @@ type GitCommitResponse struct {
 	VerificationFlag     string `json:"VerificationFlag"`
 	Author               GitAuthorResponse `json:"Author"`
 }
+
+type GitCommitResponseSlice []GitCommitResponse

@@ -31,8 +31,8 @@ var GitCmdBodyFlag string = fmt.Sprint(
 	`--pretty=format:%n----------%n%H$$$$$%b`,
 )
 
-func ParseGitNormalizeResponse(str string) []GitCommitResponse {
-	res := []GitCommitResponse{}
+func ParseGitNormalizeResponse(str string) GitCommitResponseSlice {
+	res := GitCommitResponseSlice{}
 
 	err := json.Unmarshal([]byte(str), &res)
 	if err != nil {
@@ -125,7 +125,7 @@ func GetBodyCommits() map[string]string {
 	return normalizeResponse
 }
 
-func GetCommits() []GitCommitResponse {
+func GetCommits() GitCommitResponseSlice {
 	plainResponse := GitGetResponse()
 	//fmt.Print(plainResponse)
 	normalizeResponse := NormalizeGitGetResponse(plainResponse, SanitizedKeyBodyPattern)
@@ -138,7 +138,7 @@ func SetBody(resp *GitCommitResponse, body string) GitCommitResponse {
 	return *resp
 }
 
-func SetBodies(in []GitCommitResponse, bodies map[string]string) ([]GitCommitResponse) {
+func SetBodies(in GitCommitResponseSlice, bodies map[string]string) (GitCommitResponseSlice) {
 	// Mutate
 	for index, elem := range in {
 		if val, ok := bodies[elem.CommitID]; ok {
@@ -149,4 +149,4 @@ func SetBodies(in []GitCommitResponse, bodies map[string]string) ([]GitCommitRes
 	return in
 }
 
-var Commits []GitCommitResponse = GetCommits()
+var Commits GitCommitResponseSlice = GetCommits()

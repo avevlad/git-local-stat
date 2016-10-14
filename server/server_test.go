@@ -20,7 +20,7 @@ func TestJsonParseCommit(t *testing.T) {
 
 func TestJsonParseCommitList(t *testing.T) {
 	str := "[{\n\"CommitId\": \"75897c2dcd1dd3a6ca46284dd37e13d22b4b16b4\",\n\"TreeId\": \"d9585ffa48a5563525251e8cc657c61d1a3f4625\",\n\"ParentId\": \"\",\n\"Subject\": \"Initial public release\",\n\"SanitizedSubjectLine\": \"Initial-public-release\",\n\"Body\": \"\",\n\"VerificationFlag\": \"N\",\n\"Author\": {\n\"Name\": \"Paul O’Shannessy\",\n\"Email\": \"paul@oshannessy.com\",\n\"Date\": \"Wed, 29 May 2013 12:46:11 -0700\"\n}\n}]"
-	res := []GitCommitResponse{}
+	res := GitCommitResponseSlice{}
 	err := json.Unmarshal([]byte(str), &res)
 	if err != nil {
 		t.Error(err)
