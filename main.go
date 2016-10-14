@@ -26,8 +26,12 @@ func main() {
 	xd := time.Now()
 	fmt.Println("BEFORE X", time.Since(start))
 	//X(hh, "Sun, 1 Oct 2016 18:08:09 +0300")
-	rex := hh.DateRangeFilter("", "Sun, 2 Oct 2016 18:08:09 +0300")
+	rex := hh.DateRangeFilter("", "Sun, 2 Oct 2016 18:08:09 +0300", []server.Predicate{func(commit server.GitCommitResponse) bool {
+			return commit.Author.Name == "AveVlad"
+	},})
+	//rexx := hh.DateRangeFilter("Sun, 2 Oct 2016 18:08:09 +0300", "")
 	fmt.Println(len(rex))
+	//fmt.Println(len(rexx))
 	fmt.Println(len(hh))
 	fmt.Println("AFTER X", time.Since(xd))
 
