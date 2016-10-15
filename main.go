@@ -22,27 +22,17 @@ func main() {
 	//_ = server.SetBody(&server.Commits[0], bodyCommits[server.Commits[0].CommitId])
 
 	hh := server.SetBodies(server.Commits, bodyCommits)
-	//fmt.Print("hhhhhhhhhhhhhh", hh[0].Author.Date, hh[0].CommitID)
 	xd := time.Now()
 	fmt.Println("BEFORE X", time.Since(start))
-	//X(hh, "Sun, 1 Oct 2016 18:08:09 +0300")
-	rex := hh.DateRangeFilter("", "", []server.Predicate{
+	rex := hh.DateRangeFilter("", "", true, []server.Predicate{
 		func(commit server.GitCommitResponse) bool {
-			return commit.Author.Name == "AveVlad"
+			return commit.Author.Name == "osxfcn"
 		},
 		func(commit server.GitCommitResponse) bool {
-			return commit.CommitID == "24d4f30ce4001a2ab9a37005a1d2c6537ecd3ac0"
+			return commit.CommitID == "b22cda08bdc28963a249bd4b4f1a6da246c067e2"
 		}}...)
-	//rexx := hh.DateRangeFilter("Sun, 2 Oct 2016 18:08:09 +0300", "")
 	fmt.Println(len(rex))
-	//fmt.Println(len(rexx))
-	fmt.Println(len(hh))
+	fmt.Println(hh[0].Author.Date)
 	fmt.Println("AFTER X", time.Since(xd))
 	fmt.Println("//////////\\///313/23////d/f/vc/c/vc/xv/cx/vd/fas/df/ds/fa")
-	fmt.Println("//////////\\///313/23////d/f/vc/c/vc/xv/cx/vd/fas/df/ds/fa")
-	fmt.Println("//////////\\///313/23////d/f/vc/c/vc/xv/cx/vd/fas/df/ds/fa")
-	fmt.Println("//////////\\///313/23////d/f/vc/c/vc/xv/cx/vd/fas/df/ds/fa")
-	//fmt.Println(len(XX(hh, "Sun, 2 Oct 2016 18:08:09 +0300", "")))
-
-	//fmt.Print(len(XX(hh, "", "")))
 }

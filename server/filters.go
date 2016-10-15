@@ -2,15 +2,22 @@ package server
 
 import "fmt"
 
-type Predicate func(a GitCommitResponse) bool
+type Predicate func(commit GitCommitResponse) bool
 
-func (commitsSlice GitCommitResponseSlice) Filter(filters ...Predicate) GitCommitResponseSlice {
+// If strict = true, Filter All
+// Else Filter Any
+func (commitsSlice GitCommitResponseSlice) Filter(strict bool, filters ...Predicate) GitCommitResponseSlice {
 	res := GitCommitResponseSlice{}
 	for _, v := range commitsSlice {
-		isSatisfied := true
+		isSatisfied := strict
 		for _, filter := range filters {
-			if !filter(v) {
-				isSatisfied = false
+			f := filter(v)
+			if strict {
+				f = !f
+			}
+			if f {
+				isSatisfied = !strict
+				break
 			}
 		}
 
@@ -21,7 +28,7 @@ func (commitsSlice GitCommitResponseSlice) Filter(filters ...Predicate) GitCommi
 	return res
 }
 
-func (commitArray GitCommitResponseSlice) DateRangeFilter(dateStart string, dateEnd string, f ...Predicate) GitCommitResponseSlice {
+func (commitArray GitCommitResponseSlice) DateRangeFilter(dateStart string, dateEnd string, strict bool, f ...Predicate) GitCommitResponseSlice {
 	res := GitCommitResponseSlice{}
 	timeStart, errNoStart := GitDateTime(dateStart)
 	timeEnd, errNoEnd := GitDateTime(dateEnd)
@@ -29,13 +36,13 @@ func (commitArray GitCommitResponseSlice) DateRangeFilter(dateStart string, date
 	case errNoStart != nil && errNoEnd != nil:
 		fmt.Println("CASE NO INTERVAL")
 		if f != nil {
-			res = commitArray.Filter(f...)
+			res = commitArray.Filter(strict, f...)
 		} else {
 			return commitArray
 		}
 	case errNoStart != nil && errNoEnd == nil:
 		fmt.Println("CASE NO START")
-		res = commitArray.Filter(append(f, func(commit GitCommitResponse) bool {
+		res = commitArray.Filter(strict, append(f, func(commit GitCommitResponse) bool {
 			commitTime, err := GitDateTime(commit.Author.Date)
 			if err == nil {
 				return commitTime.Unix() <= timeEnd.Unix()
@@ -44,7 +51,7 @@ func (commitArray GitCommitResponseSlice) DateRangeFilter(dateStart string, date
 		})...)
 	case errNoStart == nil && errNoEnd != nil:
 		fmt.Println("CASE NO END")
-		res = commitArray.Filter(append(f, func(commit GitCommitResponse) bool {
+		res = commitArray.Filter(strict, append(f, func(commit GitCommitResponse) bool {
 			commitTime, err := GitDateTime(commit.Author.Date)
 			if err == nil {
 				return commitTime.Unix() >= timeStart.Unix()
@@ -53,7 +60,7 @@ func (commitArray GitCommitResponseSlice) DateRangeFilter(dateStart string, date
 		})...)
 	case errNoStart == nil && errNoEnd == nil:
 		fmt.Println("CASE EXACT")
-		res = commitArray.Filter(append(f, func(commit GitCommitResponse) bool {
+		res = commitArray.Filter(strict, append(f, func(commit GitCommitResponse) bool {
 			commitTime, err := GitDateTime(commit.Author.Date)
 			if err == nil {
 				return commitTime.Unix() >= timeStart.Unix() && commitTime.Unix() <= timeEnd.Unix()
