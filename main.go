@@ -35,4 +35,17 @@ func main() {
 	fmt.Println(hh[0].Author.Date)
 	fmt.Println("AFTER X", time.Since(xd))
 	fmt.Println("//////////\\///313/23////d/f/vc/c/vc/xv/cx/vd/fas/df/ds/fa")
+
+	//xdd := time.Now()
+	for _, v := range hh.GroupByDay() {
+		fmt.Sprint(v.Date, len(v.Commits))
+		// The output to console is slow
+		fmt.Print(v.Date, len(v.Commits))
+	}
+
+	for _, v := range hh.GroupByDayFromDates("Fri, 14 Oct 2016 20:28:27 +0300", "Sat, 8 Oct 2016 17:59:50 +0300") {
+		fmt.Println(v.Count)
+	}
+
+	fmt.Println(time.Since(start))
 }

@@ -1,5 +1,7 @@
 package server
 
+import "time"
+
 type GitAuthorResponse struct {
 	Date  string `json:"Date"`
 	Email string `json:"Email"`
@@ -18,3 +20,15 @@ type GitCommitResponse struct {
 }
 
 type GitCommitResponseSlice []GitCommitResponse
+
+type GitCommitResponsesByDay struct {
+	Date Day
+	Commits GitCommitResponseSlice
+	Count int
+}
+
+type Day struct {
+	Year int
+	Month time.Month
+	Day int
+}
