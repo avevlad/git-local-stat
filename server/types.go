@@ -27,6 +27,26 @@ type GitCommitResponsesByDay struct {
 	Count int
 }
 
+type GitCommitResponsesByWeek struct {
+	Week int
+	Year int
+	Commits GitCommitResponseSlice
+	Count int
+}
+
+type GitCommitResponsesByMonth struct {
+	Month int
+	Year int
+	Commits GitCommitResponseSlice
+	Count int
+}
+
+type GitCommitResponsesByYear struct {
+	Year int
+	Commits GitCommitResponseSlice
+	Count int
+}
+
 type Day struct {
 	Year int
 	Month time.Month

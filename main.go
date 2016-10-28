@@ -43,6 +43,24 @@ func main() {
 		fmt.Print(v.Date, len(v.Commits))
 	}
 
+	fmt.Println("SDFDSFDSFDF")
+	for _, v := range hh.GroupByWeek() {
+		// The output to console is slow
+		fmt.Println(v.Count, "X", len(v.Commits), "X", v.Week)
+	}
+
+	fmt.Println("SDFDSFDSFDF")
+	for _, v := range hh.GroupByMonth() {
+		// The output to console is slow
+		fmt.Println(v.Count, "X", len(v.Commits), "X", v.Month)
+	}
+
+	fmt.Println("SDFDSFDSFDF")
+	for _, v := range hh.GroupByYear() {
+		// The output to console is slow
+		fmt.Println(v.Count, "X", len(v.Commits), "X", v.Year)
+	}
+
 	for _, v := range hh.GroupByDayFromDates("Fri, 14 Oct 2016 20:28:27 +0300", "Sat, 8 Oct 2016 17:59:50 +0300") {
 		fmt.Println(v.Count)
 	}
